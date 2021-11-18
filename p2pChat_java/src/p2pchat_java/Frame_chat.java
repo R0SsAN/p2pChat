@@ -32,9 +32,10 @@ public class Frame_chat extends javax.swing.JFrame {
     Thread_Ascolto tAscolto;
     public Frame_chat() throws SocketException {
         initComponents();
-        gestione=new Gestione_Chat(this);
-        invio=new Invio();
+        gestione=Gestione_Chat.getInstance(this);
+        invio=Invio.getInstance();
         tAscolto=new Thread_Ascolto();
+        tAscolto.start();
         
         
         
@@ -168,7 +169,7 @@ public class Frame_chat extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             gestione.ip_destinatario=InetAddress.getByName(ipDestinatario.getText());
-            //invio.inviaRichiestaConnessione();
+            invio.inviaRichiestaConnessione();
         } catch (UnknownHostException ex) {
             JOptionPane.showMessageDialog(null, "IP non valido!");
         } catch (IOException ex) {

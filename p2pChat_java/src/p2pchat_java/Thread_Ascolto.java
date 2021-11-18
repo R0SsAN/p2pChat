@@ -31,9 +31,11 @@ public class Thread_Ascolto extends Thread{
 
     @Override
     public void run() {
-        DatagramPacket pacchetto=new DatagramPacket(null, 0);
+        DatagramPacket pacchetto;
         while(true)
         {
+            byte[] buffer=new byte[1500];
+            pacchetto= new DatagramPacket(buffer, buffer.length);
             String[] ricezione=getStringRicezione(pacchetto);
             
             //se ricevo richiesta connessione
@@ -59,17 +61,14 @@ public class Thread_Ascolto extends Thread{
     
     public String[] getStringRicezione(DatagramPacket pacchetto)
     {
-        byte[] buffer=new byte[1500];
-        pacchetto= new DatagramPacket(buffer, buffer.length);
+        
         //ascolto quello che ricevo
-        buffer=new byte[1500];
-        pacchetto=new DatagramPacket(buffer, buffer.length);
         try {
             ascolto.receive(pacchetto);
         } catch (IOException ex) {
             Logger.getLogger(Thread_Ascolto.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String[] ricezione=(new String(buffer).trim()).split(";");
+        String[] ricezione=(new String(pacchetto.getData()).trim()).split(";");
         return ricezione;
     }
     
@@ -79,11 +78,9 @@ public class Thread_Ascolto extends Thread{
         if(gestione.statoConnessione == 0)
         {
             String temp="Nuova richiesta da: "+ricezione[1]+"\n {IP:"+ip.toString()+"}";
-            Object[] options = {"Accetta","Rifiuta"};
-            int n = JOptionPane.showOptionDialog(gestione.frame,temp,null, JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,
-                    null,options,options[1]);
+            int result = JOptionPane.showConfirmDialog(gestione.frame,temp, "Richiste connessione",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             //se accetto la richiesta di connessione gli invio la conferma più il mio nome
-            if(n==0)
+            if(result == JOptionPane.YES_OPTION)
             {
                 gestione.statoConnessione=2;
                 gestione.ip_destinatario=ip;
@@ -91,7 +88,7 @@ public class Thread_Ascolto extends Thread{
                 invio.invioGenerico("y;"+gestione.nickname_mittente+";", ip);
             }
             //se non la accetto gli invio il deny
-            else if(n==1)
+            else if(result == JOptionPane.NO_OPTION)
             {
                 invio.invioGenerico("n;", ip);
             }
@@ -121,6 +118,7 @@ public class Thread_Ascolto extends Thread{
                         gestione.nickname_destinatario=ricezione[1];
                         invio.invioGenerico("y;", ip);
                         gestione.statoConnessione=3;
+                        JOptionPane.showMessageDialog(null, "Connessione accettata, avvio chat!");
                         gestione.avviaChat();
                     }
                     //se io rifiuto la richiesta già accettata dal destinatario
