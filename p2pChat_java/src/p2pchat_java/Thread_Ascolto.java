@@ -116,15 +116,17 @@ public class Thread_Ascolto extends Thread{
                     if(n==0)
                     {
                         gestione.nickname_destinatario=ricezione[1];
+                        gestione.avviaChat();
                         invio.invioGenerico("y;", ip);
                         gestione.statoConnessione=3;
                         JOptionPane.showMessageDialog(null, "Connessione accettata, avvio chat!");
-                        gestione.avviaChat();
                     }
                     //se io rifiuto la richiesta già accettata dal destinatario
                     else if(n==1)
                     {
-                       invio.invioGenerico("n;", ip); 
+                       invio.invioGenerico("n;", ip);
+                       gestione.frame.ripristinaGrafica();
+                       gestione.statoConnessione=0;
                     }
                 }
                 //se ricevo una conferma a caso invio un rifiuto
@@ -132,7 +134,13 @@ public class Thread_Ascolto extends Thread{
                     invio.invioGenerico("n;", ip);
                 //se invece il destinatario mi rifiuta la connessione
                 else if(ricezione[0].equals("n"))
+                {
                     gestione.statoConnessione=0;
+                    gestione.frame.ripristinaGrafica();
+                    JOptionPane.showMessageDialog(null, "Connessione rifiutata!");
+                }
+                    
+                
             }
         }
         //se invece sono il destinatario e sono in attesa della conferma del mittente
@@ -143,6 +151,7 @@ public class Thread_Ascolto extends Thread{
                 //se ricevo una conferma avvio la chat
                 if(ricezione[0].equals("y") && ricezione.length==1)
                 {
+                    gestione.avviaChat();
                     JOptionPane.showMessageDialog(null, "Connessione accettata, avvio chat!");
                     gestione.statoConnessione=3;
                 }
@@ -150,8 +159,15 @@ public class Thread_Ascolto extends Thread{
                 else if(ricezione[0].equals("n"))
                 {
                     gestione.statoConnessione=0;
+                    gestione.frame.ripristinaGrafica();
+                    JOptionPane.showMessageDialog(null, "Connessione rifiutata!");
                 }
             }
+        }
+        //controllo se proviene da uno dei destinatari che non avevano risposto alla mia richisesta
+        if(gestione.controllaPresenza(ip.toString()))
+        {
+            invio.invioGenerico("n;", ip);
         }
         
     }   

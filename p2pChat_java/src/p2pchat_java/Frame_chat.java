@@ -111,9 +111,13 @@ public class Frame_chat extends javax.swing.JFrame {
 
         bNick.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         bNick.setText("Aggiorna nick");
+        bNick.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bNickActionPerformed(evt);
+            }
+        });
 
         ipDestinatario.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        ipDestinatario.setText("192.168.1.10");
 
         jLabel2.setText("IP DESTINATARIO");
 
@@ -135,7 +139,7 @@ public class Frame_chat extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(ipDestinatario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(bAvvia, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bAvvia, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(66, 66, 66))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,30 +157,48 @@ public class Frame_chat extends javax.swing.JFrame {
                     .addComponent(bNick, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(19, 19, 19)
                 .addComponent(scrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bAvvia, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ipDestinatario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ipDestinatario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bAvvia, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void bAvviaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAvviaActionPerformed
-        try {
-            // TODO add your handling code here:
-            gestione.ip_destinatario=InetAddress.getByName(ipDestinatario.getText());
-            invio.inviaRichiestaConnessione();
-        } catch (UnknownHostException ex) {
-            JOptionPane.showMessageDialog(null, "IP non valido!");
-        } catch (IOException ex) {
-            Logger.getLogger(Frame_chat.class.getName()).log(Level.SEVERE, null, ex);
+        if(gestione.statoConnessione==0)
+        {
+            try {
+                // TODO add your handling code here:
+                gestione.ip_destinatario=InetAddress.getByName(ipDestinatario.getText());
+                invio.inviaRichiestaConnessione();
+            } catch (UnknownHostException ex) {
+                JOptionPane.showMessageDialog(null, "IP non valido!");
+            } catch (IOException ex) {
+                Logger.getLogger(Frame_chat.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //aggiorno componenti grafici
+            ipDestinatario.setVisible(false);
+            jLabel2.setVisible(false);
+            bAvvia.setText("Chiudi connessione");
         }
+        else if(gestione.statoConnessione==1 || gestione.statoConnessione == 2)
+            gestione.annullaRichiesta();
+        else if(gestione.statoConnessione == 3)
+            gestione.terminaChat();
+        
+        
         
     }//GEN-LAST:event_bAvviaActionPerformed
+
+    private void bNickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNickActionPerformed
+        // TODO add your handling code here:
+        gestione.nickname_mittente=nickMittente.getText();
+    }//GEN-LAST:event_bNickActionPerformed
 
     /**
      * @param args the command line arguments
@@ -220,6 +242,20 @@ public class Frame_chat extends javax.swing.JFrame {
     public void aggiornaDestinatario(String nick)
     {
         nickDestinatario.setText(nick);
+    }
+    public void aggiornaGrafica()
+    {
+        //aggiorno componenti grafici
+        ipDestinatario.setVisible(false);
+        jLabel2.setVisible(false);
+        bAvvia.setText("Chiudi connessione");
+    }
+    public void ripristinaGrafica()
+    {
+        //aggiorno componenti grafici
+        ipDestinatario.setVisible(true);
+        jLabel2.setVisible(true);
+        bAvvia.setText("Avvia chat");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

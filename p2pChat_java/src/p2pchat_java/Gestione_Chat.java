@@ -58,7 +58,33 @@ public class Gestione_Chat {
     }
     public void avviaChat()
     {
+        frame.aggiornaDestinatario(nickname_destinatario);
+        frame.aggiornaGrafica();
         
+    }
+    public void annullaRichiesta()
+    {
+        statoConnessione=0;
+        nessunaRisposta.add(ip_destinatario.toString());
+        frame.ripristinaGrafica();
+    }
+    public void terminaChat()
+    {
+        //DA FARE
+        
+        frame.ripristinaGrafica();
+    }
+    public boolean controllaPresenza(String ip)
+    {
+        for (int i = 0; i < nessunaRisposta.size(); i++) {
+            if(nessunaRisposta.get(i).contains(ip))
+            {
+                nessunaRisposta.remove(i);
+                return true;
+            }
+                
+        }
+        return false;
     }
     
     
