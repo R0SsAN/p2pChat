@@ -47,5 +47,10 @@ public class Invio {
         pacchetto.setPort(12345);
         ascolto.send(pacchetto);
     }
+    public void inviaRichiestaConnessione() throws IOException
+    {
+        gestione.statoConnessione=1;
+        invioGenerico("a;"+gestione.nickname_mittente+";", gestione.ip_destinatario);
+    }
     
 }

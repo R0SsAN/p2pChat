@@ -5,8 +5,18 @@
  */
 package p2pchat_java;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.border.EmptyBorder;
 
 /**
  *
@@ -17,8 +27,29 @@ public class Frame_chat extends javax.swing.JFrame {
     /**
      * Creates new form Frame_chat
      */
-    public Frame_chat() {
+    Gestione_Chat gestione;
+    Invio invio;
+    Thread_Ascolto tAscolto;
+    public Frame_chat() throws SocketException {
         initComponents();
+        gestione=new Gestione_Chat(this);
+        invio=new Invio();
+        tAscolto=new Thread_Ascolto();
+        
+        
+        
+        
+        
+        JLabel labell = new JLabel("dd");
+        labell.setBounds(50, 50, 150, 20);
+        labell.setSize(100, 100);
+        labell.setBorder(new EmptyBorder(0,10,0,0));
+        labell.setOpaque(true);
+        labell.setBackground(Color.red);
+        labell.setFont(new Font("Dialog",Font.PLAIN,16));
+        labell.setText("ciao");
+        pannello.add(labell);
+       
         
     }
 
@@ -32,6 +63,7 @@ public class Frame_chat extends javax.swing.JFrame {
     private void initComponents() {
 
         scrollPanel = new javax.swing.JScrollPane();
+        pannello = new javax.swing.JPanel();
         bAvvia = new javax.swing.JButton();
         nickDestinatario = new javax.swing.JLabel();
         nickMittente = new javax.swing.JTextField();
@@ -46,8 +78,29 @@ public class Frame_chat extends javax.swing.JFrame {
         scrollPanel.setForeground(new java.awt.Color(243, 238, 170));
         scrollPanel.setToolTipText("");
 
+        pannello.setBackground(new java.awt.Color(179, 223, 252));
+        pannello.setPreferredSize(new java.awt.Dimension(300, 475));
+
+        javax.swing.GroupLayout pannelloLayout = new javax.swing.GroupLayout(pannello);
+        pannello.setLayout(pannelloLayout);
+        pannelloLayout.setHorizontalGroup(
+            pannelloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 418, Short.MAX_VALUE)
+        );
+        pannelloLayout.setVerticalGroup(
+            pannelloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 475, Short.MAX_VALUE)
+        );
+
+        scrollPanel.setViewportView(pannello);
+
         bAvvia.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         bAvvia.setText("Avvia Chat");
+        bAvvia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAvviaActionPerformed(evt);
+            }
+        });
 
         nickDestinatario.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         nickDestinatario.setText("Nome destinatario");
@@ -111,6 +164,19 @@ public class Frame_chat extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void bAvviaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAvviaActionPerformed
+        try {
+            // TODO add your handling code here:
+            gestione.ip_destinatario=InetAddress.getByName(ipDestinatario.getText());
+            //invio.inviaRichiestaConnessione();
+        } catch (UnknownHostException ex) {
+            JOptionPane.showMessageDialog(null, "IP non valido!");
+        } catch (IOException ex) {
+            Logger.getLogger(Frame_chat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_bAvviaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -141,7 +207,11 @@ public class Frame_chat extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Frame_chat().setVisible(true);
+                try {
+                    new Frame_chat().setVisible(true);
+                } catch (SocketException ex) {
+                    Logger.getLogger(Frame_chat.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         
@@ -158,6 +228,7 @@ public class Frame_chat extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel nickDestinatario;
     private javax.swing.JTextField nickMittente;
+    private javax.swing.JPanel pannello;
     private javax.swing.JScrollPane scrollPanel;
     // End of variables declaration//GEN-END:variables
 }

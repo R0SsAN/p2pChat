@@ -5,6 +5,7 @@
  */
 package p2pchat_java;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
@@ -33,6 +34,8 @@ public class Gestione_Chat {
     String nickname_mittente;
     String nickname_destinatario;
     
+    InetAddress ip_destinatario;
+    
     //lista che contiene tutti gli ip dei destinatari che non hanno risposto alla mia richiesta
     ArrayList<String> nessunaRisposta;
 
@@ -41,6 +44,7 @@ public class Gestione_Chat {
         statoConnessione=0;
         nickname_mittente="ruossan";
         nickname_destinatario="napoli";
+        ip_destinatario=null;
         nessunaRisposta=new ArrayList<>();
     }
     public void setMittente(String nick)
@@ -51,6 +55,10 @@ public class Gestione_Chat {
     {
         nickname_destinatario=nick;
         frame.getComponents();
+    }
+    public void avviaChat()
+    {
+        
     }
     
     
