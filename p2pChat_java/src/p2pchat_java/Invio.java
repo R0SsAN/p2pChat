@@ -36,7 +36,7 @@ public class Invio {
         byte[] buffer=("a;"+nomeMittente+";").getBytes();
         DatagramPacket pacchetto=new DatagramPacket(buffer,buffer.length);
         pacchetto.setAddress(ip);
-        pacchetto.setPort(12346);
+        pacchetto.setPort(12345);
         invio.send(pacchetto);
     }
     public void invioGenerico(String str, InetAddress ip) throws IOException
@@ -44,7 +44,7 @@ public class Invio {
         byte[] buffer=str.getBytes();
         DatagramPacket pacchetto=new DatagramPacket(buffer,buffer.length);
         pacchetto.setAddress(ip);
-        pacchetto.setPort(12346);
+        pacchetto.setPort(12345);
         invio.send(pacchetto);
     }
     public void inviaRichiestaConnessione() throws IOException
