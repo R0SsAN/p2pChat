@@ -25,32 +25,38 @@ public class Invio {
         return _instance;
     }
     Gestione_Chat gestione;
-    DatagramSocket ascolto;
+    DatagramSocket invio;
     public Invio() throws SocketException
     {
         gestione=Gestione_Chat.getInstance(null);
-        ascolto = new DatagramSocket();
+        invio = new DatagramSocket();
     }
     public void inviaApertura(String nomeMittente, InetAddress ip) throws IOException
     {
         byte[] buffer=("a;"+nomeMittente+";").getBytes();
         DatagramPacket pacchetto=new DatagramPacket(buffer,buffer.length);
         pacchetto.setAddress(ip);
-        pacchetto.setPort(12345);
-        ascolto.send(pacchetto);
+        pacchetto.setPort(12346);
+        invio.send(pacchetto);
     }
     public void invioGenerico(String str, InetAddress ip) throws IOException
     {
         byte[] buffer=str.getBytes();
         DatagramPacket pacchetto=new DatagramPacket(buffer,buffer.length);
         pacchetto.setAddress(ip);
-        pacchetto.setPort(12345);
-        ascolto.send(pacchetto);
+        pacchetto.setPort(12346);
+        invio.send(pacchetto);
     }
     public void inviaRichiestaConnessione() throws IOException
     {
-        gestione.statoConnessione=1;
         invioGenerico("a;"+gestione.nickname_mittente+";", gestione.ip_destinatario);
+        gestione.statoConnessione=1;
+    }
+    //-------------------
+    //METODI INVIO MESSAGGI
+    public void inviaMessaggioTesto(String messaggio) throws IOException
+    {
+        invioGenerico("m;"+messaggio+";", gestione.ip_destinatario);
     }
     
 }

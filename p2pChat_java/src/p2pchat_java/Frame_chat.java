@@ -7,6 +7,7 @@ package p2pchat_java;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollBar;
 import javax.swing.border.EmptyBorder;
 
 /**
@@ -30,6 +32,11 @@ public class Frame_chat extends javax.swing.JFrame {
     Gestione_Chat gestione;
     Invio invio;
     Thread_Ascolto tAscolto;
+    
+    //variabili per visualizzazione messaggi
+    int sizeY;
+    int yAttuale;
+    
     public Frame_chat() throws SocketException {
         initComponents();
         gestione=Gestione_Chat.getInstance(this);
@@ -37,10 +44,13 @@ public class Frame_chat extends javax.swing.JFrame {
         tAscolto=new Thread_Ascolto();
         tAscolto.start();
         
+        yAttuale=10;
+        sizeY=383;
+        
+
         
         
-        
-        
+        /*
         JLabel labell = new JLabel("dd");
         labell.setBounds(50, 50, 150, 20);
         labell.setSize(100, 100);
@@ -50,7 +60,7 @@ public class Frame_chat extends javax.swing.JFrame {
         labell.setFont(new Font("Dialog",Font.PLAIN,16));
         labell.setText("ciao");
         pannello.add(labell);
-       
+       */
         
     }
 
@@ -63,6 +73,8 @@ public class Frame_chat extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         scrollPanel = new javax.swing.JScrollPane();
         pannello = new javax.swing.JPanel();
         bAvvia = new javax.swing.JButton();
@@ -71,26 +83,35 @@ public class Frame_chat extends javax.swing.JFrame {
         bNick = new javax.swing.JButton();
         ipDestinatario = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        testoInvio = new javax.swing.JTextArea();
+        bInvia = new javax.swing.JButton();
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(166, 214, 246));
+        setResizable(false);
 
         scrollPanel.setBackground(new java.awt.Color(243, 238, 170));
         scrollPanel.setForeground(new java.awt.Color(243, 238, 170));
         scrollPanel.setToolTipText("");
 
         pannello.setBackground(new java.awt.Color(179, 223, 252));
-        pannello.setPreferredSize(new java.awt.Dimension(300, 475));
+        pannello.setPreferredSize(new java.awt.Dimension(300, 383));
 
         javax.swing.GroupLayout pannelloLayout = new javax.swing.GroupLayout(pannello);
         pannello.setLayout(pannelloLayout);
         pannelloLayout.setHorizontalGroup(
             pannelloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 418, Short.MAX_VALUE)
+            .addGap(0, 671, Short.MAX_VALUE)
         );
         pannelloLayout.setVerticalGroup(
             pannelloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 475, Short.MAX_VALUE)
+            .addGap(0, 383, Short.MAX_VALUE)
         );
 
         scrollPanel.setViewportView(pannello);
@@ -121,6 +142,43 @@ public class Frame_chat extends javax.swing.JFrame {
 
         jLabel2.setText("IP DESTINATARIO");
 
+        jPanel1.setBackground(new java.awt.Color(148, 243, 224));
+
+        testoInvio.setColumns(20);
+        testoInvio.setRows(5);
+        testoInvio.setEnabled(false);
+        jScrollPane2.setViewportView(testoInvio);
+
+        bInvia.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        bInvia.setText("INVIA");
+        bInvia.setEnabled(false);
+        bInvia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bInviaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(bInvia)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(bInvia, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -133,19 +191,22 @@ public class Frame_chat extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(nickDestinatario, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(57, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(53, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(scrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 687, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(ipDestinatario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(bAvvia, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(66, 66, 66))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(56, 56, 56))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(ipDestinatario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(126, 126, 126)
+                                .addComponent(bAvvia, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)))
+                        .addGap(12, 12, 12)))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,14 +217,17 @@ public class Frame_chat extends javax.swing.JFrame {
                     .addComponent(nickMittente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bNick, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(19, 19, 19)
-                .addComponent(scrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                .addComponent(jLabel2)
+                .addComponent(scrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ipDestinatario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bAvvia, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ipDestinatario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bAvvia, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         pack();
@@ -172,24 +236,33 @@ public class Frame_chat extends javax.swing.JFrame {
     private void bAvviaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAvviaActionPerformed
         if(gestione.statoConnessione==0)
         {
+            boolean check=false;
             try {
                 // TODO add your handling code here:
                 gestione.ip_destinatario=InetAddress.getByName(ipDestinatario.getText());
                 invio.inviaRichiestaConnessione();
+                check=true;
             } catch (UnknownHostException ex) {
                 JOptionPane.showMessageDialog(null, "IP non valido!");
             } catch (IOException ex) {
                 Logger.getLogger(Frame_chat.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //aggiorno componenti grafici
-            ipDestinatario.setVisible(false);
-            jLabel2.setVisible(false);
-            bAvvia.setText("Chiudi connessione");
+            if(check)
+            {
+                //aggiorno componenti grafici
+                ipDestinatario.setVisible(false);
+                jLabel2.setVisible(false);
+                bAvvia.setText("Chiudi connessione");
+            }
         }
         else if(gestione.statoConnessione==1 || gestione.statoConnessione == 2)
             gestione.annullaRichiesta();
         else if(gestione.statoConnessione == 3)
-            gestione.terminaChat();
+            try {
+                gestione.terminaChat(true);
+        } catch (IOException ex) {
+            Logger.getLogger(Frame_chat.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
         
@@ -199,6 +272,21 @@ public class Frame_chat extends javax.swing.JFrame {
         // TODO add your handling code here:
         gestione.nickname_mittente=nickMittente.getText();
     }//GEN-LAST:event_bNickActionPerformed
+
+    private void bInviaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bInviaActionPerformed
+        // TODO add your handling code here:
+        if(gestione.statoConnessione==3 && testoInvio.getText() != "")
+        {
+            String messaggio=testoInvio.getText();
+            try {
+                invio.inviaMessaggioTesto(messaggio);
+                gestione.gestioneMessaggioTesto(messaggio, true);
+            } catch (IOException ex) {
+                Logger.getLogger(Frame_chat.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            testoInvio.setText("");
+        }
+    }//GEN-LAST:event_bInviaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -249,6 +337,9 @@ public class Frame_chat extends javax.swing.JFrame {
         ipDestinatario.setVisible(false);
         jLabel2.setVisible(false);
         bAvvia.setText("Chiudi connessione");
+        
+        testoInvio.setEnabled(true);
+        bInvia.setEnabled(true);
     }
     public void ripristinaGrafica()
     {
@@ -256,16 +347,102 @@ public class Frame_chat extends javax.swing.JFrame {
         ipDestinatario.setVisible(true);
         jLabel2.setVisible(true);
         bAvvia.setText("Avvia chat");
+        
+        testoInvio.setEnabled(false);
+        bInvia.setEnabled(false);
+    }
+    public void svuotaPanel()
+    {
+        pannello.removeAll();
+        pannello.revalidate();
+        pannello.repaint();
+    }
+    public void inserisciMessaggioTesto(String messaggio,boolean chi)
+    {
+        StringBuilder str=new StringBuilder();
+        str.insert(0,messaggio);
+        int contRighe=1;
+        
+        //sistemo la stringa in modo da poterla inserire nela label senza uscire dalle dimensioni orizzontali
+        
+        //ogni 54 caratteri (che sono quelli massimi che ci stanno orizzontalmente) cerco di andare a capo
+        // 1) se trovo uno spazio vicino allora vado a capo in quel punto
+        // 2) se invece non trovo spazi allora vado a capo al limite dei 54 caratteri
+        for (int i = 54; i < messaggio.length(); i+=54) {
+            if(messaggio.length()>i)
+            {
+                boolean check=false;
+                for (int j = i-10; j < messaggio.length() && j<i+10; j++) {
+                    if(messaggio.charAt(j)==' ')
+                    {
+                        str.insert(j, "<br>");
+                        check=true;
+                        break;
+                    }
+                }
+                //controllo se è andato a capo, se non è andato vuol dire che non erano presenti spazi
+                // di conseguenza vado a capo senza guardare le parole
+                if(!check)
+                    str.insert(i-10, "<br>");
+            }
+            contRighe++;
+        }
+        
+        messaggio=str.toString();
+        //creo la label contenente il messaggio
+        JLabel labell = new JLabel();
+        /*labell.setBounds(50, 50, 150, 20);*/
+        if(contRighe==1)
+            labell.setSize(calcolaLarghezzaLabel(messaggio)+10, 30);
+        else
+            labell.setSize(400, 23*contRighe);
+        
+        labell.setBorder(new EmptyBorder(0,10,0,10));
+        labell.setOpaque(true);
+        labell.setBackground(Color.lightGray);
+        labell.setFont(new Font("Dialog",Font.PLAIN,14));
+        labell.setText("<html>"+messaggio+"</html>");
+        
+        //modifico la grandezza del panel per contenere il messaggio
+        sizeY+=labell.getSize().height+15;
+        pannello.setPreferredSize(new Dimension(300,sizeY));
+        //se devo visualizzare un messaggio inviato da me
+        if(!chi)
+            labell.setLocation(15, yAttuale);
+        else
+            labell.setLocation(pannello.getSize().width-labell.getSize().width-15, yAttuale);
+            
+        yAttuale+=labell.getSize().height+15;
+        pannello.add(labell);
+        
+        //faccio scrollare automaticamente lo scrollPane fino in fondo
+        JScrollBar sb = scrollPanel.getVerticalScrollBar();
+        sb.setValue( sb.getMaximum() );
+        
+        //alla fine repainto tutto
+        this.repaint();
+    }
+    public int calcolaLarghezzaLabel(String messaggio)
+    {
+        int contI=(int) messaggio.chars().filter(ch -> ch == 'i').count();
+        int contOther=messaggio.length()-contI;
+        return ((contI*8)+(contOther*13));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAvvia;
+    private javax.swing.JButton bInvia;
     private javax.swing.JButton bNick;
     private javax.swing.JTextField ipDestinatario;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel nickDestinatario;
     private javax.swing.JTextField nickMittente;
     private javax.swing.JPanel pannello;
     private javax.swing.JScrollPane scrollPanel;
+    private javax.swing.JTextArea testoInvio;
     // End of variables declaration//GEN-END:variables
 }

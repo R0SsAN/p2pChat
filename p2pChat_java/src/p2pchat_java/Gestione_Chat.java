@@ -5,7 +5,9 @@
  */
 package p2pchat_java;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
@@ -15,7 +17,7 @@ import javax.swing.JFrame;
  */
 public class Gestione_Chat {
     static Gestione_Chat _instance=null;
-    static synchronized public Gestione_Chat getInstance(Frame_chat frame)
+    static synchronized public Gestione_Chat getInstance(Frame_chat frame) throws SocketException
     {
         if(_instance==null)
             _instance=new Gestione_Chat(frame);
@@ -38,8 +40,11 @@ public class Gestione_Chat {
     
     //lista che contiene tutti gli ip dei destinatari che non hanno risposto alla mia richiesta
     ArrayList<String> nessunaRisposta;
+    
+    //Classe per invio
+    Invio invio;
 
-    public Gestione_Chat(Frame_chat frame) {
+    public Gestione_Chat(Frame_chat frame) throws SocketException {
         this.frame=frame;
         statoConnessione=0;
         nickname_mittente="ruossan";
@@ -68,10 +73,16 @@ public class Gestione_Chat {
         nessunaRisposta.add(ip_destinatario.toString());
         frame.ripristinaGrafica();
     }
-    public void terminaChat()
+    public void terminaChat(boolean check) throws IOException
     {
-        //DA FARE
+        //inizializzo l'istanza invio che non avevo inizializzato nel costruttore
+        if(invio == null)
+            invio=Invio.getInstance();
         
+        statoConnessione=0;
+        if(check)
+            invio.invioGenerico("c;", ip_destinatario);
+        frame.svuotaPanel();
         frame.ripristinaGrafica();
     }
     public boolean controllaPresenza(String ip)
@@ -81,11 +92,20 @@ public class Gestione_Chat {
             {
                 nessunaRisposta.remove(i);
                 return true;
-            }
-                
+            }   
         }
         return false;
     }
-    
+    //------------------------
+    //METODI GESTIONE MESSAGGI
+    public void gestioneMessaggioTesto(String s, boolean check)
+    {
+        //se sono io a inviare il messaggio
+        if(check)
+            frame.inserisciMessaggioTesto(s, true);
+        //se invece sono quello che lo riceve
+        else
+            frame.inserisciMessaggioTesto(s, false);
+    }
     
 }

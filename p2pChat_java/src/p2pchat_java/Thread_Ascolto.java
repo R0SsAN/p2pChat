@@ -55,7 +55,22 @@ public class Thread_Ascolto extends Thread{
                     Logger.getLogger(Thread_Ascolto.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-                
+            else if(ricezione[0].equals("m"))
+            {
+                try {
+                    gestisciRicezioneMessaggio(ricezione,pacchetto.getAddress());
+                } catch (IOException ex) {
+                    Logger.getLogger(Thread_Ascolto.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else if(ricezione[0].equals("c"))
+            {
+                try {
+                    gestisciChiusuraChat(ricezione,pacchetto.getAddress());
+                } catch (IOException ex) {
+                    Logger.getLogger(Thread_Ascolto.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }  
         } 
     }
     
@@ -139,9 +154,9 @@ public class Thread_Ascolto extends Thread{
                     gestione.frame.ripristinaGrafica();
                     JOptionPane.showMessageDialog(null, "Connessione rifiutata!");
                 }
-                    
-                
             }
+            else
+                invio.invioGenerico("n;", ip);
         }
         //se invece sono il destinatario e sono in attesa della conferma del mittente
         else if(gestione.statoConnessione==2)
@@ -163,12 +178,34 @@ public class Thread_Ascolto extends Thread{
                     JOptionPane.showMessageDialog(null, "Connessione rifiutata!");
                 }
             }
+            else
+                invio.invioGenerico("n;", ip);
         }
         //controllo se proviene da uno dei destinatari che non avevano risposto alla mia richisesta
         if(gestione.controllaPresenza(ip.toString()))
         {
             invio.invioGenerico("n;", ip);
         }
-        
-    }   
+    }
+    public void gestisciRicezioneMessaggio(String[] ricezione, InetAddress ip) throws IOException
+    {
+        //se ricevo un messaggio dal destinatario corretto della chat lo gestisco e visualizzo
+        if(ip.equals(gestione.ip_destinatario))
+        {
+            gestione.gestioneMessaggioTesto(ricezione[1],false);
+        }
+        //se invece lo ricevo da un peer a caso lo butto via e gli rispondo chiudendo al connessione
+        else
+            invio.invioGenerico("c;", ip);
+    }
+    public void gestisciChiusuraChat(String[] ricezione, InetAddress ip) throws IOException
+    {
+        //se ricevo la richiesta chiusura chat dal destinatario con cui stò comunicando
+        //chiudo la connessione e ripristino tutta l'interfaccia
+        if(ip.equals(gestione.ip_destinatario))
+        {
+            gestione.terminaChat(false);
+        }
+        //se invece ricevo la richiesta chiusura da un altro peer a caso non faccio nulla
+    }
 }
