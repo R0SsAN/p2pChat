@@ -58,5 +58,4 @@ public class Invio {
     {
         invioGenerico("m;"+messaggio+";", gestione.ip_destinatario);
     }
-    
 }

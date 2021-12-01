@@ -43,6 +43,9 @@ public class Gestione_Chat {
     
     //Classe per invio
     Invio invio;
+    
+    //Classe per backuppare tutti i messaggi
+    Messaggi backupMessaggi;
 
     public Gestione_Chat(Frame_chat frame) throws SocketException {
         this.frame=frame;
@@ -51,6 +54,7 @@ public class Gestione_Chat {
         nickname_destinatario="napoli";
         ip_destinatario=null;
         nessunaRisposta=new ArrayList<>();
+        backupMessaggi=Messaggi.getInstance();
     }
     public void setMittente(String nick)
     {
@@ -102,10 +106,17 @@ public class Gestione_Chat {
     {
         //se sono io a inviare il messaggio
         if(check)
+        {
             frame.inserisciMessaggioTesto(s, true);
+            backupMessaggi.inserisciMessagioInviato(new Messaggio(1,ip_destinatario,s));
+        }
         //se invece sono quello che lo riceve
         else
-            frame.inserisciMessaggioTesto(s, false);
+        {
+           frame.inserisciMessaggioTesto(s, false); 
+           backupMessaggi.inserisciMessagioRicevuto(new Messaggio(1,ip_destinatario,s));
+        }
+            
     }
     
 }

@@ -32,6 +32,7 @@ public class Frame_chat extends javax.swing.JFrame {
     Gestione_Chat gestione;
     Invio invio;
     Thread_Ascolto tAscolto;
+    Messaggi backupMessaggi;
     
     //variabili per visualizzazione messaggi
     int sizeY;
@@ -41,6 +42,7 @@ public class Frame_chat extends javax.swing.JFrame {
         initComponents();
         gestione=Gestione_Chat.getInstance(this);
         invio=Invio.getInstance();
+        backupMessaggi=Messaggi.getInstance();
         tAscolto=new Thread_Ascolto();
         tAscolto.start();
         
